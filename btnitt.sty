@@ -137,6 +137,8 @@
 % guide
 \newcommand{\setguide}[1]{\def\nittguide{#1}}
 
+\newcommand{\nittfont}[1]{
+	\fontsize{#1pt}{\dimexpr 1.2pt*#1pt\relax}}
 
 %%% typesets the TITLE page
 \newcommand{\thetitlepage}{{%
@@ -144,21 +146,21 @@
 		\thispagestyle{empty}
 		\centering
 		\vspace*{-\toptafiddle}
-		{\huge \nitttitle}
+		{\nittfont{18} \nitttitle}
 		\vfill
 		{\SingleSpace
 			A \nittdoctype~ submitted in partial fulfillment of the
 			requirements for the award of the degree of \par}
-		\textbf{\large \nittdegree \\ in \\ \nittdept}
+		\textbf{\nittfont{14} \nittdegree \\ in \\ \nittdept}
 		\vfill
-		{By \\ \textbf{\large \nittauthor(\nittauthorrno)}}
+		{By \\ \textbf{\nittfont{14} \nittauthor(\nittauthorrno)}}
 		\vfill
 		\begin{figure}[h]
 			\centering
 			\includegraphics[height=3cm]{NIT_Trichy_logo}
 		\end{figure}
 		\textbf{
-			\Large
+			\nittfont{16}
 			\nittdept \\
 			NATIONAL INSTITUTE OF TECHNOLOGY \\
 			TIRUCHIRAPPALLI-620015 \\

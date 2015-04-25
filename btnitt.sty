@@ -1,0 +1,199 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{btnitt}[2015/04/24 v0.1 NITT BTech Thesis]
+
+%% justify text
+\usepackage{ragged2e}
+
+\usepackage{graphicx}
+
+%% Only works with the memoirs class.
+\@ifclassloaded{memoir}{\let \endbtnitt\relax}{\let\endbtnitt\endinput
+\PackageError{btnitt}{The btnitt package only works with memoir class}
+{\@ehd}}
+\endbtnitt
+
+%% Using the same font everywhere
+\usepackage{url}
+\urlstyle{same}
+\setverbatimfont{\normalfont\rmfamily}
+
+%% Ensuring footnotes use the same font
+\renewcommand*{\foottextfont}{\normalfont\normalsize}
+
+%% To enable spacing to be changed by the user if necessary
+\newcommand*{\setnittspacing}[1]{%
+	\let\NittSpacing#1
+	\NittSpacing}
+\setnittspacing{\DoubleSpacing}
+
+%% Margins
+\setlrmarginsandblock{1.5in}{1in}{*}
+
+%% for main body, bottom of text at 1in, footer below
+%% top of header at 1in, first text line double spaced
+%% below base of header
+\newlength{\linespace}
+\setlength{\linespace}{\baselineskip} % current equivalent of \onelineskip
+\setlength{\headheight}{\onelineskip}
+\setlength{\headsep}{\linespace}
+\addtolength{\headsep}{-\topskip}
+\setlength{\uppermargin}{1in}
+\addtolength{\uppermargin}{\headheight}
+\addtolength{\uppermargin}{\headsep}
+
+%% and for the bottom
+\setlength{\lowermargin}{1in}
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-\uppermargin}
+\addtolength{\textheight}{-\lowermargin}
+
+%% footnote settings
+\setlength{\footskip}{\onelineskip}
+\setlength{\footnotesep}{\onelineskip}
+
+%% the fiddle lengths (..ta.. for title/approval page, others for prelims)
+\newlength{\toptafiddle} \setlength{\toptafiddle}{2\linespace}
+\newlength{\bottafiddle} \setlength{\bottafiddle}{0pt}
+\newlength{\topfiddle}
+\setlength{\topfiddle}{\toptafiddle}
+\newlength{\botfiddle}
+\setlength{\botfiddle}{\onelineskip}
+
+%% increasing the paragraph indentation
+\setlength{\parindent}{2em}
+\checkandfixthelayout[nearest]
+
+%% \textheight in a one-column document
+\newcommand*{\addtotextheight}[1]{%
+\twocolumn
+\addtolength{\textheight}{#1}%
+\onecolumn}
+
+%% Pagestyles
+% No need to define pagestyles, since NITT uses page numbers at the bottom
+% which are already provided by the plain page style.
+%%
+
+%% chapter style
+\makechapterstyle{nitt}{%
+\setlength{\beforechapskip}{-\topfiddle}
+\setlength{\midchapskip}{1.0\onelineskip}
+\setlength{\afterchapskip}{1.0\onelineskip}
+\renewcommand*{\chapnamefont}{\normalfont}
+\renewcommand*{\chapnumfont}{\chapnamefont}
+\renewcommand*{\printchapternum}{\centering\chapnumfont \thechapter}
+\renewcommand*{\chaptitlefont}{\normalfont\centering}
+\renewcommand*{\printchapternonum}{}}
+\aliaspagestyle{chapter}{empty}
+
+%% TODO:change style for appendix if needed later
+
+%% for REFERENCE section
+\renewcommand*{\bibname}{References}
+\setlength{\bibitemsep}{\onelineskip}
+
+%% TODO:check bibliography spacing
+
+%%% general macro for Abstract, etc., headings
+\newcommand*{\pretoctitle}[1]{{\clearpage\centering
+\vspace*{-\topfiddle}#1\par}}
+%%% Start the ACKNOWLEDGEMENTS
+\newcommand{\nittacknowledgements}{\pretoctitle{ACKNOWLEDGEMENTS}}
+
+%%% Start the ABSTRACT
+\newcommand{\nittabstract}{%
+\addtotextheight{-\botfiddle}%
+\pretoctitle{ABSTRACT}}
+
+\addtodef{\mainmatter}{\addtotextheight}{\botfiddle}{}
+
+%% make it easy to center any dedication
+\newcommand{\nittdedication}[1]{%
+{\clearpage\mbox{}\vfill\centering #1 \par\vfill\clearpage}}
+
+%% for any headings after the tocloft and before the main body
+\newcommand{\prelimtitle}[1]{%
+\pretoctitle{#1}\addcontentsline{toc}{chapter}{#1}}
+
+%%%% for the title page and approval page.
+% your title
+\newcommand{\settitle}[1]{\def\nitttitle{#1}}
+% you
+\newcommand{\setauthor}[1]{\def\nittauthor{#1}}
+% your roll number
+\newcommand{\setauthorrno}[1]{\def\nittauthorrno{#1}}
+% document type (e.g., thesis)
+\newcommand{\setdoctype}[1]{\def\nittdoctype{#1}}
+% possible degree
+\newcommand{\bachelors}[1]{\def\nittdegree{#1}}
+% department name
+\newcommand{\deptname}[1]{\def\nittdept{#1}}
+% viva voice date
+\newcommand{\setdefdate}[1]{\def\nittdefdate{#1}}
+% graduation date
+\newcommand{\setgraddate}[1]{\def\nittgraddate{#1}}
+% hod
+\newcommand{\sethod}[1]{\def\nitthod{#1}}
+% guide
+\newcommand{\setguide}[1]{\def\nittguide{#1}}
+
+
+%%% typesets the TITLE page
+\newcommand{\thetitlepage}{{%
+		\clearpage
+		\thispagestyle{empty}
+		\centering
+		\vspace*{-\toptafiddle}
+		{\huge \nitttitle}
+		\vfill
+		{\SingleSpace
+			A \nittdoctype~ submitted in partial fulfillment of the
+			requirements for the award of the degree of \par}
+		\textbf{\large \nittdegree \\ in \\ \nittdept}
+		\vfill
+		{By \\ \textbf{\large \nittauthor(\nittauthorrno)}}
+		\vfill
+		\begin{figure}[h]
+			\centering
+			\includegraphics[height=3cm]{NIT_Trichy_logo}
+		\end{figure}
+		\textbf{
+			\Large
+			\nittdept \\
+			NATIONAL INSTITUTE OF TECHNOLOGY \\
+			TIRUCHIRAPPALLI-620015 \\
+			\nittgraddate
+		}
+		\enlargethispage{\bottafiddle}
+		\clearpage}}
+
+%%% typesets the BONAFIDE page
+\newcommand{\bonafidepage}{{%
+		\thispagestyle{empty}
+		\vspace*{-\toptafiddle}
+		\centering
+		{\textbf{BONAFIDE CERTIFICATE}}
+		\vfill
+		{\SingleSpace \justify
+			This is to certify that the project titled \textbf{\nitttitle} is a
+			bonafide record done by}
+		\vfill
+		{\textbf{\nittauthor(\nittauthorrno)}}
+		\vfill
+		{\SingleSpace \justify
+			in partial fulfillment of the requirements for the award of the
+			degree of \nittdegree~ in ~\nittdept~ of the NATIONAL INSTITUTE OF 
+			TECHNOLOGY, TIRUCHIRAPPALLI, during the year \nittgraddate.
+		}
+		\vfill
+		\begin{tabular}{ccc}
+			\textbf{\nittguide} & \hfill & \textbf{\nitthod} \\
+			GUIDE				& \hfill & Head of the Department
+		\end{tabular}
+		\vfill
+		Project Viva-voce held on \nittdefdate.
+		\enlargethispage{\bottafiddle}
+		\clearpage}}
+
+\pagestyle{plain}
+\endinput
